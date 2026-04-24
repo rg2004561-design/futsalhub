@@ -31,25 +31,14 @@ export default function PaymentIndex({ booking, token, redirectUrl, clientKey }:
     const [isProcessing, setIsProcessing] = useState(false);
     const [debugInfo, setDebugInfo] = useState('');
 
-    console.log('Payment page loaded');
-    console.log('Token available:', !!token);
-    console.log('Redirect URL available:', !!redirectUrl);
-    console.log('Client key:', clientKey);
-    console.log('Redirect URL:', redirectUrl);
-
     const handlePayment = () => {
-        console.log('=== Payment button clicked ===');
-
         if (!redirectUrl) {
             alert('URL pembayaran tidak tersedia. Silakan refresh halaman.');
-            console.error('Redirect URL is empty');
             return;
         }
 
         setIsProcessing(true);
         setDebugInfo('Mengarahkan ke halaman pembayaran Midtrans...');
-
-        console.log('Redirecting to:', redirectUrl);
         
         // Redirect to Midtrans payment page
         window.location.href = redirectUrl;

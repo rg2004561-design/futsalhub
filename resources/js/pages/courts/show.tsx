@@ -51,7 +51,6 @@ export default function CourtShow({ court, availableSlots }: CourtShowProps) {
                     }
                 })
                 .catch(err => {
-                    console.error('Error fetching slots:', err);
                     setSlots([]);
                 })
                 .finally(() => setIsLoadingSlots(false));

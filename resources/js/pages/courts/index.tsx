@@ -59,7 +59,7 @@ export default function CourtsIndex({ courts = { data: [] } }: CourtsIndexProps)
                                     {court.photos.length > 0 && (
                                         <div className="relative h-48 bg-gray-200 rounded-t-lg overflow-hidden">
                                             <img
-                                                src={`/storage/${court.photos[0].path}`}
+                                                src={`/images.php?path=${court.photos[0].path}`}
                                                 alt={court.name}
                                                 className="w-full h-full object-cover"
                                             />

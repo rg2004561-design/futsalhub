@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import { Upload, X } from 'lucide-react';
 import AdminLayout from '@/components/admin-layout';
 
@@ -28,6 +28,7 @@ interface EditCourtProps {
 export default function CourtEdit({ court }: EditCourtProps) {
     const { data, setData, post, errors, processing } = useForm({
         name: court.name,
+        slug: court.slug,
         description: court.description,
         price_per_hour: court.price_per_hour ? Number(court.price_per_hour) : 0,
         facilities: court.facilities,
@@ -77,7 +78,33 @@ export default function CourtEdit({ court }: EditCourtProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('admin.courts.update', { court: court.id }), {
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        
+        // Add all form fields
+        formData.append('name', data.name);
+        formData.append('description', data.description);
+        formData.append('price_per_hour', data.price_per_hour.toString());
+        formData.append('open_time', data.open_time);
+        formData.append('close_time', data.close_time);
+        formData.append('is_active', data.is_active ? '1' : '0');
+        
+        // Add facilities
+        data.facilities.forEach((facility, index) => {
+            formData.append(`facilities[${index}]`, facility);
+        });
+        
+        // Add removed photos
+        removedPhotos.forEach(photoId => {
+            formData.append('removed_photos[]', photoId.toString());
+        });
+        
+        // Add new photos
+        data.new_photos.forEach((photo: File) => {
+            formData.append('new_photos[]', photo);
+        });
+        
+        router.post(route('admin.courts.update', court.id), formData, {
             preserveScroll: true,
             forceFormData: true,
         });
@@ -220,21 +247,16 @@ export default function CourtEdit({ court }: EditCourtProps) {
                             <h2 className="text-xl font-bold text-gray-900">Foto Saat Ini</h2>
 
                             <div className="grid grid-cols-4 gap-4">
-                                {court.photos.map((photo) => (
-                                    <div
-                                        key={photo.id}
-                                        className={`relative ${removedPhotos.includes(photo.id) ? 'opacity-50' : ''}`}
-                                    >
+                                {court.photos.filter(photo => !removedPhotos.includes(photo.id)).map((photo) => (
+                                    <div key={photo.id} className="relative">
                                         <img src={`/storage/${photo.path}`} alt="Court" className="w-full h-24 object-cover rounded-lg" />
-                                        {!removedPhotos.includes(photo.id) && (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleRemoveExistingPhoto(photo.id)}
-                                                className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full"
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveExistingPhoto(photo.id)}
+                                            className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full"
+                                        >
+                                            <X size={14} />
+                                        </button>
                                     </div>
                                 ))}
                             </div>

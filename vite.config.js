@@ -15,6 +15,20 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+    },
+    build: {
+        outDir: 'public/build',
+        manifest: true,
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.tsx',
+                css: 'resources/css/app.css',
+            },
+        },
+    },
     esbuild: {
         jsx: 'automatic',
     },

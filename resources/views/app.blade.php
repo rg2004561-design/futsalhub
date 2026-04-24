@@ -12,8 +12,9 @@
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
         @routes
-        @viteReactRefresh
-        @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        <!-- Production Assets - Hardcoded to avoid manifest issues -->
+        <link rel="stylesheet" href="{{ asset('build/assets/app-DLJVibyB.css') }}">
+        <script src="{{ asset('build/assets/app-tu07-g7k.js') }}" type="module" defer></script>
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

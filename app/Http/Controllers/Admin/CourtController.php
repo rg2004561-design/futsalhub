@@ -86,6 +86,8 @@ class CourtController extends Controller
             'open_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'close_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
             'is_active' => 'boolean',
+            'removed_photos' => 'array',
+            'new_photos.*' => 'image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
         $court->name = $validated['name'];
@@ -96,6 +98,14 @@ class CourtController extends Controller
         $court->close_time = strlen($validated['close_time']) === 5 ? $validated['close_time'].':00' : $validated['close_time'];
         $court->is_active = $validated['is_active'] ?? false;
         $court->save();
+
+        // Handle removed photos
+        if ($request->has('removed_photos')) {
+            $removedPhotos = $request->input('removed_photos');
+            if (is_array($removedPhotos) && !empty($removedPhotos)) {
+                CourtPhoto::whereIn('id', $removedPhotos)->delete();
+            }
+        }
 
         // Handle new photo uploads
         if ($request->hasFile('new_photos')) {

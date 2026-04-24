@@ -75,8 +75,6 @@ export default function BookingCreate({ court, date, availableSlots, user }: Boo
                 notes: data.notes,
             };
 
-            console.log('Sending payload:', payload);
-
             const response = await axios.post('/bookings', payload);
             
             if (response.data.success && response.data.booking_id) {
@@ -86,9 +84,6 @@ export default function BookingCreate({ court, date, availableSlots, user }: Boo
                 setErrorMessage('Gagal membuat booking. Silakan coba lagi.');
             }
         } catch (error: any) {
-            console.error('Booking error:', error);
-            console.error('Response data:', error.response?.data);
-            
             // Handle validation errors
             if (error.response?.status === 422) {
                 const validationErrors = error.response?.data?.errors;
