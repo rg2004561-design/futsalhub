@@ -56,7 +56,7 @@ export default function Welcome({ topCourts = [] }: WelcomeProps) {
             <div className="bg-white text-gray-900 py-16">
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex justify-between items-center mb-12">
-                        <h2 className="text-3xl font-bold">Lapangan Terpopuler</h2>
+                        <h2 className="text-3xl font-bold">Jenis Lapangan</h2>
                         <Link href={route('courts.index')} className="text-blue-600 hover:text-blue-800 font-semibold transition">
                             Lihat Semua →
                         </Link>
